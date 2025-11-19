@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy import stats
-import math
+from math import sqrt
 
 
 
@@ -19,6 +19,7 @@ def colums_description(df, cols):
 
 
 def proportion_of_disease(df):
+    
     return (df["disease"].mean())
 
 
@@ -30,6 +31,7 @@ def sample_disease(df, n,seed=42):
     return sample.mean()
 
 
+
 def compare_disease(p_real, p_sim):
     diff = p_sim - p_real
     rel_diff = (diff / p_real) * 100
@@ -37,7 +39,7 @@ def compare_disease(p_real, p_sim):
     return diff, rel_diff
 
 
-def bootstrap(df,B=5000):
+def bootstrap(df,B=3000):
    x = df["systolic_bp"].dropna()
 
    boot_means = np.empty(B)
@@ -49,6 +51,21 @@ def bootstrap(df,B=5000):
    upper = np.percentile(boot_means, 97.5)
 
    return lower,upper,boot_means
+
+def ci_mean_normal(x, confidence=0.95):
+    x = np.asarray(x, dtype = float)
+
+    mean_x =float(np.mean(x))
+    s = float(np.std(x, ddof = 1))
+    n = len(x)
+
+    z_critical = 1.96
+
+    half_width = z_critical * s / sqrt(n)
+    lo = mean_x - half_width
+    hi = mean_x + half_width
+
+    return lo, hi, mean_x, s, n
 
 def smoker_t_test(df):
 
