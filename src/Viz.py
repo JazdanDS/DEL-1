@@ -3,11 +3,17 @@ import seaborn as sns
 import numpy as np
 from src import Metrics as M
 
+"""
+Histogram över blodtryck
+Boxplot för kön och vikt
+Stapeldiagram för andelen icke rökar och rökare
+Kallar på funktionen bootstrap och skapar histogram för bootstrapfördelningen samt markerade konfidensintervall"""
+
 def plots(df):
     sns.set(style="whitegrid")
-
-    plt.figure(figsize=(7,4))
-    sns.histplot(df["systolic_bp"],bins=20,color="Yellow",edgecolor="black")
+#Histogram för blodtryck
+    plt.figure(figsize=(6,4))
+    sns.histplot(df["systolic_bp"],bins=20,color="Red",edgecolor="black")
     plt.title("Systoliskt blodtryck")
     plt.xlabel("Blodtryck(mmHg)")
     plt.ylabel("Antal personer")
@@ -15,6 +21,7 @@ def plots(df):
     plt.show()
     plt.close()
 
+#Boxplot vikt per kön
     plt.figure(figsize=(6,4))
     sns.boxplot(data=df, y="weight",x="sex",hue="sex", palette="Set2",legend=False)
     plt.title("Vikt per kön")
@@ -23,7 +30,7 @@ def plots(df):
     plt.ylabel("Vikt (kg)")
     plt.show()
     plt.close()
-    
+#Stapeldiagram icke rökare vs rökare    
     plt.figure(figsize=(6,4))
     sns.countplot(data=df, x="smoker", hue="smoker", palette=["green", "red"], legend=False)
     plt.title("Andel rökare vs icke-rökare")
@@ -31,7 +38,7 @@ def plots(df):
     plt.ylabel("Antal personer")
     plt.show()
     plt.close()
-    
+#Bootstrap fördelning av medelvärde för blodtryck    
     lower, upper, boot_means = M.bootstrap(df,B=3000)
     plt.hist(boot_means,bins=50, color="skyblue", edgecolor="black")
     plt.axvline(lower, color="red", linestyle="--", label="Nedre CI-gräns")
@@ -44,3 +51,4 @@ def plots(df):
     plt.legend()
     plt.show()
     plt.close()
+    

@@ -1,5 +1,5 @@
 import pandas as pd
-
+#Läser in datasetet
 
 def load_csv(filepath):
     with open(filepath, "r",encoding="utf-8") as f:
@@ -7,6 +7,11 @@ def load_csv(filepath):
         
         return(df)
 
+#Rensar och den data som vi läst in
+#Tar bort whitespace
+#Standardiser sex och smoker
+#Gör om värden som skall vara numeriska till numeriska
+#Dropna på rader som saknar värden i de kolumer vi vill ha
 
 def clean_df(df):
     df.columns = [i.strip() for i in df.columns]
@@ -19,6 +24,8 @@ def clean_df(df):
     df["disease"] = df["disease"].astype(int)
    
     return df
+
+#Asisterande funktion som både läser och rensar datan för att underlätta
 
 def load_and_clean(filepath):
     df = load_csv(filepath)
