@@ -3,7 +3,7 @@ import pandas as pd
 from scipy import stats
 from math import sqrt
 
-
+#Beräknar statestik för kolumer
 
 def colums_description(df, cols):
     result = {}
@@ -17,11 +17,13 @@ def colums_description(df, cols):
         }
     return pd.DataFrame(result).T
 
+#Beräknar andelen av perseoner som har sjukdom
 
 def proportion_of_disease(df):
     
     return (df["disease"].mean())
 
+# Simulation för andel sjuka genom ett slumpmässigt stickprov
 
 def sample_disease(df, n,seed=42):
     np.random.seed(seed)
@@ -30,7 +32,7 @@ def sample_disease(df, n,seed=42):
     
     return sample.mean()
 
-
+#Jämför den simulerade med den verkliga andelen sjukdom
 
 def compare_disease(p_real, p_sim):
     diff = p_sim - p_real
@@ -38,6 +40,7 @@ def compare_disease(p_real, p_sim):
     
     return diff, rel_diff
 
+#Bootstrap analys av medelvärdet
 
 def bootstrap(df,B=3000):
    x = df["systolic_bp"].dropna()
@@ -45,14 +48,16 @@ def bootstrap(df,B=3000):
    boot_means = np.empty(B)
    for b in range(B):
        sample = x.sample(n=len(x),replace=True)
-       boot_means[b] = sample.mean()
+       boot_means[b] = sample.mean()#Bootstrap medelvärdena
        
-   lower = np.percentile(boot_means,2.5)
-   upper = np.percentile(boot_means, 97.5)
+   lower = np.percentile(boot_means,2.5) #Nedre 2.5% procentilen
+   upper = np.percentile(boot_means, 97.5)#Övre 97,5% procentilen
 
    return lower,upper,boot_means
 
-def ci_mean_normal(x, confidence=0.95):
+#Normalapproximerat konfidensintervall av medelvärdet
+
+def ci_mean_normal(x, confidence:float = 0.95):
     x = np.asarray(x, dtype = float)
 
     mean_x =float(np.mean(x))
